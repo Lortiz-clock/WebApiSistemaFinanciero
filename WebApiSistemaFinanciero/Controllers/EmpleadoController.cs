@@ -22,7 +22,7 @@ namespace WebApiSistemaFinanciero.Controllers
 
         //Metodo para listar
 
-        [HttpGet("Lista Empleados")]
+        [HttpGet("Lista Empleado")]
         public async Task<ActionResult<IEnumerable<TblEmpleado>>> ListarEmpleado()
         {
             var Empleados = await _context.TblEmpleados.Select(c => new EmpleadoDTO
@@ -77,7 +77,7 @@ namespace WebApiSistemaFinanciero.Controllers
 
         //Metodo para elimiar un registro
 
-        [HttpDelete("EliminarEmpleado")]
+        [HttpDelete("Eliminar Empleado")]
         public async Task<ActionResult>ElimininarEmpleado(int CodigoEmpleado)
         {
             var Empleado = await _context.TblEmpleados.FindAsync(CodigoEmpleado);
