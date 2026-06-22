@@ -47,3 +47,43 @@ REST API desarrollada con ASP.NET Core y Entity Framework Core para la gestión 
 ```
 
 4. Abrir Swagger
+   https://localhost:{puerto}/swagger
+## 🐳 Correr con Docker
+
+```bash
+docker build -t webapi-sistema-financiero .
+docker run -p 8080:80 webapi-sistema-financiero
+```
+
+## 📁 Estructura del proyecto
+
+WebApiSistemaFinanciero/
+
+├── Controllers/
+
+│   ├── ClientesController.cs
+
+│   ├── CuentasController.cs
+
+│   └── EmpleadoController.cs
+
+├── DTOs/
+
+│   ├── ClientesDTOs.cs
+
+│   ├── ClientesCrearDTOs.cs
+
+│   ├── ActualizarClienteDTOs.cs
+
+│   ├── EmpleadoDTO.cs
+
+│   ├── CrearEmpleadoDTOs.cs
+
+│   └── EditarEmpleado.cs
+
+└── Models/
+👨‍💻 Autor
+Luis Fernando Ortiz Hernández
+
+GitHub • www.linkedin.com/in/luis-fernando-ortiz-hernandez-a12934271
+   
