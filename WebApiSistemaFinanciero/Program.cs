@@ -32,13 +32,10 @@ app.Use(async (context, next) =>
     await next();
 });
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-    app.UseSwaggerUI();
-    app.UseSwagger();
-}
+
+app.MapOpenApi();
+app.UseSwaggerUI();
+app.UseSwagger();
 
 app.UseHttpsRedirection();
 
