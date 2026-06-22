@@ -12,7 +12,7 @@ namespace WebApiHotel.Controllers
         //inyeccion de la clase generada con el comando Scaffold-DbContext se debe de aclarar que se usa:
         //Microsoft.EntityFrameworkCore.SqlServer
         private readonly DbAlianzaRegionalContext _context;
-
+            
         //constructor
         public EmpleadoController(DbAlianzaRegionalContext context)
         {
@@ -22,46 +22,58 @@ namespace WebApiHotel.Controllers
 
         //Metodo para listar
 
-        [HttpGet("Lista")]
+        [HttpGet("Lista Empleados")]
         public async Task<ActionResult<IEnumerable<TblEmpleado>>> ListarEmpleado()
         {
-            var Empleados = await _context.TblEmpleados.ToListAsync();
+            var Empleados = await _context.TblEmpleados.Select(c => new EmpleadoDTO
+            {
+                CodigoSucursal = c.CodigoSucursal,
+                Nombre = c.Nombre,
+                Telefono = c.Telefono,
+                FechaEntrada = c.FechaEntrada,
+                Direccion = c.Direccion,
+                FechaNacimiento = c.FechaNacimiento,
+                Cargo = c.Cargo
+            })
+                .ToListAsync();
             return Ok(Empleados);
+            
+            
         }
 
         //Metodo para guardar un nuevo registro
 
-        [HttpPost("Guardar")]
-        //El FromBody es para no colocarlo en el app 
-        public async Task<ActionResult<TblEmpleado>> GuardarEmpleado([FromBody]TblEmpleado Empleado)
+        [HttpPost("Guardar Empleado")]
+        public async Task<ActionResult> GuardarEmpleado([FromBody] CrearEmpleadoDTOs empleado)
         {
-            Empleado.FechaEntrada = DateTime.Now;
-            _context.TblEmpleados.Add(Empleado);
-            await _context.SaveChangesAsync();
-            return StatusCode(StatusCodes.Status201Created, Empleado);
+            try
+            {
+                var NuevoEmpleado = new TblEmpleado
+                {
+                    CodigoSucursal = empleado.CodigoSucursal,
+                    Nombre = empleado.Nombre,
+                    Telefono = empleado.Telefono,
+                    FechaEntrada = empleado.FechaEntrada,
+                    Direccion = empleado.Direccion,
+                    FechaNacimiento = empleado.FechaNacimiento,
+                    Cargo = empleado.Cargo
+                };
+                _context.TblEmpleados.Add(NuevoEmpleado);
+                await _context.SaveChangesAsync();
+
+                return StatusCode(StatusCodes.Status201Created, new { mensaje = "Empleado guardado correctamente", data = NuevoEmpleado });
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(StatusCodes.Status500InternalServerError, new { mnesaje = "Error al guardar el empleado", error = ex.Message });
+
+            }
         }
 
         //Metodo para actualizar un registro
 
-        [HttpPut("Actualizar/{CodigoEmpleado}")]
-        public async Task<ActionResult> ActualizarEmpleado(int CodigoEmpleado, TblEmpleado Empleado)
-        {
-            //validar primero si el usuario existe
-            var EmpleadoActualizado = await _context.TblEmpleados.FindAsync(CodigoEmpleado);
-            if (EmpleadoActualizado == null)
-            {
-                return NotFound();
-            }
-            EmpleadoActualizado.CodigoSucursal = Empleado.CodigoSucursal;
-            EmpleadoActualizado.Nombre = Empleado.Nombre;
-            EmpleadoActualizado.Telefono = Empleado.Telefono;
-            EmpleadoActualizado.Direccion = Empleado.Direccion;
-            EmpleadoActualizado.Cargo = Empleado.Cargo;
-            EmpleadoActualizado.Estado = Empleado.Estado;
-
-            await _context.SaveChangesAsync();
-            return Ok(EmpleadoActualizado);
-        }
+      
 
         //Metodo para elimiar un registro
 

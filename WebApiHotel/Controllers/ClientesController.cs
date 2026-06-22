@@ -103,13 +103,8 @@ namespace WebApiHotel.Controllers
 
                 return StatusCode(StatusCodes.Status500InternalServerError, new {mensaje= "Error al actualizar", error = ex.Message });
             }
-            
-
-            
-           
-
-            
-            
+                 
+                               
         }
 
         //Metodo para eliminar
@@ -150,7 +145,7 @@ namespace WebApiHotel.Controllers
             var cliente = await _context.TblClientes.FindAsync(CodigoCliente);
             if (cliente == null)
             {
-                return NotFound($"El {CodigoCliente} no existe");
+                return NotFound($"El cliente {CodigoCliente} no existe");
             }
 
             return (cliente);
