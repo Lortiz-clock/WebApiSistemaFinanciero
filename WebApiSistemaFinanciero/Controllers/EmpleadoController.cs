@@ -80,14 +80,22 @@ namespace WebApiSistemaFinanciero.Controllers
         [HttpDelete("Eliminar Empleado")]
         public async Task<ActionResult>ElimininarEmpleado(int CodigoEmpleado)
         {
-            var Empleado = await _context.TblEmpleados.FindAsync(CodigoEmpleado);
-            if (Empleado == null)
+            try
             {
-                return NotFound($"El empleado: {CodigoEmpleado} no existe, error al eliminar");
+                var empleado = await _context.TblEmpleados.FindAsync(CodigoEmpleado);
+                if (empleado == null)
+                    return NotFound(new { mensaje = $"El empleado {CodigoEmpleado} no existe" });
+
+                _context.TblEmpleados.Remove(empleado);
+                await _context.SaveChangesAsync();
+
+                return Ok(new { mensaje = $"Empleado {CodigoEmpleado} eliminado correctamente" });
             }
-            _context.TblEmpleados.Remove(Empleado);
-            await _context.SaveChangesAsync();
-            return NoContent();
+            catch (Exception ex)
+            {
+
+                return StatusCode(StatusCodes.Status500InternalServerError, new {mensaje = "Error al eliminar", error = ex.Message});
+            }
         }
 
         //Metodo para buscar un registro apartir de su codigo
