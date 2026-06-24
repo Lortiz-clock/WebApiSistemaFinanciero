@@ -4,7 +4,16 @@ using WebApiSistemaFinanciero;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<DbAlianzaRegionalContext>(option =>
-option.UseSqlServer(builder.Configuration.GetConnectionString("ConnectionDB"))); //usasr la cadena de coneccion
+option.UseSqlServer(builder.Configuration.GetConnectionString("ConnectionDB"), //usasr la cadena de coneccion
+sqlServerOptionsAction: sqlOptions =>
+{
+    
+    sqlOptions.EnableRetryOnFailure(
+        maxRetryCount: 5,
+        maxRetryDelay: TimeSpan.FromSeconds(30),
+        errorNumbersToAdd: null);
+}
+));
 // Add services to the container.
 
 builder.Services.AddControllers();
