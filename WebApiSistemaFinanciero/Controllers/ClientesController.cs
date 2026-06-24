@@ -130,11 +130,9 @@ namespace WebApiSistemaFinanciero.Controllers
 
                 return StatusCode(StatusCodes.Status500InternalServerError, new { mensaje = "Error al eliminar", error = ex.Message });
             }
-            
-              
-
+                   
+                 
            
-            
             
         }
 
